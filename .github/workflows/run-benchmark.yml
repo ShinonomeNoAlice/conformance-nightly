@@ -43,8 +43,8 @@ jobs:
 
           - name: Grab results
             run: |
-                mkdir -p $GITHUB_WORKSPACE/results
-                cp typing/conformance/results/results.html $GITHUB_WORKSPACE/results/results.html
+                mkdir -p results
+                cp typing/conformance/results/results.html results/results.html
 
           - name: Commit
             uses: stefanzweifel/git-auto-commit-action@v7
