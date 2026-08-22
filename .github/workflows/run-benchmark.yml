@@ -34,8 +34,9 @@ jobs:
                 repository: 'typing'
           
           - name: Run benchmark
-            working-directory: typing/conformance
             run: |
+                cd typing
+                cd conformance
                 python scripts/run_benchmark.py
                 uv sync --python 3.12 --frozen
                 uv run --python 3.12 --frozen python src/main.py
