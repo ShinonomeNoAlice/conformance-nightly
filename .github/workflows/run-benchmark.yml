@@ -1,0 +1,53 @@
+name: Run benchmark
+
+# Run nightly and on-demand
+on:
+  schedule:
+    - cron: '0 0 * * *' # every day at midnight
+  workflow_dispatch:
+
+# Progress
+jobs:
+    run-benchmark:
+        runs-on: ubuntu-latest
+        
+        permissions:
+            contents: write # Required to allow pushing commits
+        
+        steps:
+          - name: Checkout your repository
+            uses: actions/checkout@v7
+            with:
+                ref: ${{ github.head_ref }}
+                # Value already defaults to true, but `persist-credentials` is required to push new commits to the repository.
+                persist-credentials: true
+                
+          - name: Install uv
+            uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+          
+          - name: Clone python/typing
+            uses: GuillaumeFalourd/clone-github-repo-action@v2.3
+            with:
+                depth: 1
+                branch: 'main'
+                owner: 'python'
+                repository: 'typing'
+          
+          - name: Run benchmark
+            working-directory: typing/conformance
+            run: |
+                python scripts/run_benchmark.py
+                uv sync --python 3.12 --frozen
+                uv run --python 3.12 --frozen python src/main.py
+                uv run --python 3.12 --frozen python src/main.py
+
+          - name: Grab results
+            run: |
+                mkdir -p $GITHUB_WORKSPACE/results
+                cp typing/conformance/results/results.html $GITHUB_WORKSPACE/results/results.html
+
+          - name: Commit
+            uses: stefanzweifel/git-auto-commit-action@v7
+            with:
+                commit_message: "chore: update conformance results"
+                file_pattern: "latest_results/results.html"
