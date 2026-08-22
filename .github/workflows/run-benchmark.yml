@@ -50,4 +50,4 @@ jobs:
             uses: stefanzweifel/git-auto-commit-action@v7
             with:
                 commit_message: "chore: update conformance results"
-                file_pattern: "latest_results/results.html"
+                file_pattern: "results/results.html"
