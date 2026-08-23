@@ -21,18 +21,16 @@ jobs:
                 ref: ${{ github.head_ref }}
                 # Value already defaults to true, but `persist-credentials` is required to push new commits to the repository.
                 persist-credentials: true
-                
+
+          - name: Clone python/typing
+            uses: actions/checkout@v7
+            with:
+                repository: 'python/typing'
+                path: 'typing'
+
           - name: Install uv
             uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
-          
-          - name: Clone python/typing
-            uses: GuillaumeFalourd/clone-github-repo-action@v2.3
-            with:
-                depth: 1
-                branch: 'main'
-                owner: 'python'
-                repository: 'typing'
-          
+
           - name: Run benchmark
             working-directory: typing/conformance
             run: |
