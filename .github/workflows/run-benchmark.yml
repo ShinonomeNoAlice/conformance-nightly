@@ -49,3 +49,4 @@ jobs:
             with:
                 commit_message: "chore: update conformance results"
                 file_pattern: "results/results.html"
+                commit_author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
